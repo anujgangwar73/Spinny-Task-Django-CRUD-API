@@ -35,7 +35,7 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "Store/wsgi.py"
+            "dest": "Store/list-boxes"
         }
     ]
 }
