@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -78,8 +77,8 @@ WSGI_APPLICATION = 'Store.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3', # This is where you put the name of the db file.
-                 # If one doesn't exist, it will be created at migration time.
+        'NAME': BASE_DIR / 'db.sqlite3',  # This is where you put the name of the db file.
+        # If one doesn't exist, it will be created at migration time.
     }
 }
 # Password validation
@@ -134,6 +133,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAdminUser',
         'rest_framework.permissions.IsAuthenticated'
     ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
 }
 DEFAULT_A1 = 100
 DEFAULT_V1 = 1000
