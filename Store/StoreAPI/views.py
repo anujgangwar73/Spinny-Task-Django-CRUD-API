@@ -7,7 +7,9 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from rest_framework import status
 from rest_framework.response import Response
-
+from datetime import datetime,timedelta
+from django.db import models
+from django.conf import settings
 
 class BoxCreateView(generics.CreateAPIView):
     serializer_class = BoxSerializer
@@ -23,7 +25,7 @@ class BoxCreateView(generics.CreateAPIView):
             'total_area')
         total_boxes = Box.objects.count()
         average_area = total_area / total_boxes if total_boxes > 0 else 0
-        if average_area + (serializer.validated_data['length'] * serializer.validated_data['breadth']) > settings.A1:
+        if average_area + (serializer.validated_data['length'] * serializer.validated_data['breadth']) > getattr(settings, 'A1', 100):
             return Response({"error": "Average area of all added boxes exceeds A1"}, status=status.HTTP_403_FORBIDDEN)
 
         # Condition 2: Average volume of all boxes added by the current user shall not exceed V1
@@ -37,21 +39,21 @@ class BoxCreateView(generics.CreateAPIView):
         average_user_area = total_user_area / user_boxes_count if user_boxes_count > 0 else 0
         average_user_volume = total_user_volume / user_boxes_count if user_boxes_count > 0 else 0
         if (average_user_area + (
-                serializer.validated_data['length'] * serializer.validated_data['breadth'])) > settings.A1:
+                serializer.validated_data['length'] * serializer.validated_data['breadth'])) > getattr(settings, 'A1', 100):
             return Response({"error": "Average area of all added boxes exceeds A1"}, status=status.HTTP_403_FORBIDDEN)
         if (average_user_volume + (
                 serializer.validated_data['length'] * serializer.validated_data['breadth'] * serializer.validated_data[
-            'height'])) > settings.V1:
+            'height'])) > getattr(settings, 'V1', 100):
             return Response({"error": "Average area of all added boxes exceeds V1"}, status=status.HTTP_403_FORBIDDEN)
 
         # Condition 3: Total Boxes added in a week cannot be more than L1
         week_boxes = Box.objects.filter(created_at__gte=current_week_start, created_at__lte=current_week_end)
-        if week_boxes.count() >= settings.L1:
+        if week_boxes.count() >= getattr(settings, 'L1', 100):
             return Response({"error": "Total Boxes added in a week exceeds L1"}, status=status.HTTP_403_FORBIDDEN)
 
         # Condition 4: Total Boxes added in a week by a user cannot be more than L2
         user_week_boxes = week_boxes.filter(creator=user)
-        if user_week_boxes.count() >= settings.L2:
+        if user_week_boxes.count() >= getattr(settings, 'L2', 50):
             return Response({"error": "Total Boxes added in a week by the user exceeds L2"},
                             status=status.HTTP_403_FORBIDDEN)
 
