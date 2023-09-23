@@ -133,13 +133,13 @@ Build api for the following specifications:
 
 
 Conditions to be fulfilled on each add/update/delete:
+ 
+      1-Average area of all added boxes should not exceed A1
 
-Average area of all added boxes should not exceed A1
+      2-Average volume of all boxes added by the current user shall not exceed V1
 
-Average volume of all boxes added by the current user shall not exceed V1
+      3-Total Boxes added in a week cannot be more than L1
 
-Total Boxes added in a week cannot be more than L1
+      4-Total Boxes added in a week by a user cannot be more than L2
 
-Total Boxes added in a week by a user cannot be more than L2
-
-Values A1, V1, L1 and L2 shall be configured externally. You can choose 100, 1000, 100, and 50 as their respective default values.
+      5-Values A1, V1, L1 and L2 shall be configured externally. You can choose 100, 1000, 100, and 50 as their respective default values.
